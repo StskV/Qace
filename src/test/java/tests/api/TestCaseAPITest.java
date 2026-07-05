@@ -5,7 +5,6 @@ import adapters.TestCaseAdapter;
 import api.models.project.ProjectRq;
 import api.models.testCase.TestCaseRq;
 import api.models.testCase.TestCaseRs;
-import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
