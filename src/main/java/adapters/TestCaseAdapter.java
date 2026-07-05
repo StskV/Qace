@@ -29,7 +29,7 @@ public class TestCaseAdapter extends BaseAdapter {
                 .pathParam("code", code)
                 .pathParam("id", id)
                 .when()
-                .get("/case/{code}/{id}") // Обратите внимание на путь
+                .get("/case/{code}/{id}")
                 .then()
                 .spec(ok200)
                 .extract()
