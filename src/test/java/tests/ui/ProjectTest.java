@@ -1,8 +1,9 @@
-package tests;
+package tests.ui;
 
 import com.codeborne.selenide.Condition;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
+import tests.BaseTest;
 
 import static dict.MemberAccess.DONT_ADD_MEMBERS;
 
