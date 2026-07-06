@@ -35,11 +35,7 @@ This checklist describes the UI and API test scenarios covered by the automation
 2. Change project code
 
 ## API tests
-1. Create new project via API
-2. Delete project by code via API
-3. Create new test suite via API
-4. Delete test suite via API
-5. Create new test case via API
-6. Delete test case via API
-7. Create new defect via API
-8. Delete defect via API
+1. CRUD project via API
+2. CRUD test suite via API
+3. CRUD test case via API
+4. CRUD defect via API
