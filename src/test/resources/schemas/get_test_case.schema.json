@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "status": { "type": "boolean" },
+    "result": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "integer" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "preconditions": { "type": "string" },
+        "postconditions": { "type": "string" },
+        "severity": { "type": "integer" },
+        "priority": { "type": "integer" },
+        "automation": { "type": "integer" }
+      },
+      "required": ["id", "title", "severity", "priority", "automation"]
+    }
+  },
+  "required": ["status", "result"]
+}

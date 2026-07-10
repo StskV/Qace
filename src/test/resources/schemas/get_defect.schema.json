@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "status": { "type": "boolean" },
+    "result": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "integer" },
+        "title": { "type": "string" },
+        "actual_result": { "type": "string" },
+        "severity": { "type": "string" }
+      },
+      "required": ["id", "title", "actual_result", "severity"]
+    }
+  },
+  "required": ["status", "result"]
+}

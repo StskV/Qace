@@ -19,10 +19,10 @@ public class TestCaseRq {
     @Expose
     private String title;
     @Expose
-    private int severity;
+    private Integer severity;
     @Expose
-    private int priority;
+    private Integer priority;
     @Expose
-    private int isToBeAutomated;
+    private Integer isToBeAutomated;
 
 }

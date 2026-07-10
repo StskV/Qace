@@ -1,4 +1,4 @@
-package api.models.testCase;
+package api.models.testSuite;
 
 import api.models.common.BaseResult;
 import com.google.gson.annotations.Expose;
@@ -16,16 +16,4 @@ public class Result extends BaseResult {
     @SerializedName("preconditions")
     @Expose
     public String preconditions;
-    @SerializedName("postconditions")
-    @Expose
-    public String postconditions;
-    @SerializedName("severity")
-    @Expose
-    public int severity;
-    @SerializedName("priority")
-    @Expose
-    public int priority;
-    @SerializedName("automation")
-    @Expose
-    public int automation;
 }
