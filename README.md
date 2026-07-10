@@ -34,8 +34,8 @@ This checklist describes the UI and API test scenarios covered by the automation
 1. Change project name
 2. Change project code
 
-## API tests
-1. CRUD project via API
-2. CRUD test suite via API
-3. CRUD test case via API
-4. CRUD defect via API
+## API Test Coverage
+1. Create, Read, Delete project via API
+2. Create, Read, Update, Delete test suite via API
+3. Create, Read, Update, Delete test case via API
+4. Create, Read, Update, Delete defect via API

@@ -3,31 +3,40 @@ package tests.api;
 import adapters.ProjectAdapter;
 import api.models.project.ProjectRq;
 import api.models.project.ProjectRs;
-import org.testng.Assert;
-import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
 
 public class ProjectAPITest {
 
-    private final String CODE = "QA";
+    private final String CODE = "QA" + System.currentTimeMillis() % 100000000L;
+    private final String TITLE = "QA34";
+    private final String DESCRIPTION = "Test description";
+    private final String ACCESS = "none";
+    private final String GROUP = "Test group";
 
     @Test
-    public void checkCreateProject() {
+    public void checkProjectCRUD() {
+        SoftAssert softAssert = new SoftAssert();
+
         ProjectRq rq = ProjectRq.builder()
-                .title("QA34")
+                .title(TITLE)
                 .code(CODE)
-                .description("test")
-                .access("none")
-                .group("test")
+                .description(DESCRIPTION)
+                .access(ACCESS)
+                .group(GROUP)
                 .build();
         ProjectRs rs = ProjectAdapter.createProject(rq);
-        Assert.assertTrue(rs.status);
-        Assert.assertEquals(rs.result.code, "QA");
-    }
+        softAssert.assertTrue(rs.status, "Status not received");
+        softAssert.assertEquals(rs.result.code, CODE, "Created code mismatch");
 
-    @AfterMethod
-    public void deleteProject() {
-        ProjectAdapter.deleteProject(CODE);
+        ProjectRs fetchedRs = ProjectAdapter.getProject(CODE);
+        softAssert.assertTrue(fetchedRs.status, "Status failed");
+        softAssert.assertEquals(fetchedRs.result.code, CODE, "Fetched code mismatch");
+        softAssert.assertEquals(fetchedRs.result.title, TITLE, "Fetched title mismatch");
+
+        boolean isDeleted = ProjectAdapter.deleteProject(CODE);
+        softAssert.assertTrue(isDeleted, "Project not deleted");
+
+        softAssert.assertAll();
     }
 }
-

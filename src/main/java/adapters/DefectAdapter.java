@@ -1,50 +1,50 @@
 package adapters;
 
-import api.models.testCase.TestCaseRq;
-import api.models.testCase.TestCaseRs;
+import api.models.defect.DefectRq;
+import api.models.defect.DefectRs;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 
-public class TestCaseAdapter extends BaseAdapter {
+public class DefectAdapter extends BaseAdapter {
 
-    public static TestCaseRs createTestCase(TestCaseRq rq, String code) {
+    public static DefectRs createDefect(DefectRq rq, String code) {
         return given()
                 .spec(spec)
                 .body(rq)
                 .log().all()
                 .when()
-                .post("/case/" + code)
+                .post("/defect/" + code)
                 .then()
                 .log().all()
-                .body(matchesJsonSchemaInClasspath("schemas/create_test_case.schema.json"))
+                .body(matchesJsonSchemaInClasspath("schemas/create_defect.schema.json"))
                 .spec(ok200)
                 .extract()
-                .as(TestCaseRs.class);
+                .as(DefectRs.class);
     }
 
-    public static TestCaseRs getTestCase(String code, int id) {
+    public static DefectRs getDefect(String code, int id) {
         return given()
                 .spec(spec)
                 .pathParam("code", code)
                 .pathParam("id", id)
                 .when()
-                .get("/case/{code}/{id}")
+                .get("/defect/{code}/{id}")
                 .then()
-                .body(matchesJsonSchemaInClasspath("schemas/get_test_case.schema.json"))
+                .body(matchesJsonSchemaInClasspath("schemas/get_defect.schema.json"))
                 .spec(ok200)
                 .extract()
-                .as(TestCaseRs.class);
+                .as(DefectRs.class);
     }
 
-    public static boolean updateTestCase(TestCaseRq rq, String code, int id) {
+    public static boolean updateDefect(DefectRq rq, String code, int id) {
         return given()
                 .spec(spec)
                 .pathParam("code", code)
                 .pathParam("id", id)
                 .body(rq)
                 .when()
-                .patch("/case/{code}/{id}")
+                .patch("/defect/{code}/{id}")
                 .then()
                 .body(matchesJsonSchemaInClasspath("schemas/id_result.schema.json"))
                 .spec(ok200)
@@ -52,13 +52,13 @@ public class TestCaseAdapter extends BaseAdapter {
                 .path("status");
     }
 
-    public static boolean deleteTestCase(String code, int id) {
+    public static boolean deleteDefect(String code, int id) {
         return given()
                 .spec(spec)
                 .pathParam("code", code)
                 .pathParam("id", id)
                 .when()
-                .delete("/case/{code}/{id}")
+                .delete("/defect/{code}/{id}")
                 .then()
                 .body(matchesJsonSchemaInClasspath("schemas/id_result.schema.json"))
                 .spec(ok200)

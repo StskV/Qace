@@ -23,8 +23,21 @@ public class ProjectAdapter extends BaseAdapter {
                 .as(ProjectRs.class);
     }
 
-    public static void deleteProject(String code) {
-        given()
+    public static ProjectRs getProject(String code) {
+        return given()
+                .spec(spec)
+                .pathParam("code", code)
+                .when()
+                .get("/project/{code}")
+                .then()
+                .body(matchesJsonSchemaInClasspath("schemas/get_project.schema.json"))
+                .spec(ok200)
+                .extract()
+                .as(ProjectRs.class);
+    }
+
+    public static boolean deleteProject(String code) {
+        return given()
                 .spec(spec)
                 .pathParams("code", code)
                 .log().all()
@@ -32,6 +45,9 @@ public class ProjectAdapter extends BaseAdapter {
                 .delete("/project/{code}")
                 .then()
                 .log().all()
-                .spec(ok200);
+                .body(matchesJsonSchemaInClasspath("schemas/status_only.schema.json"))
+                .spec(ok200)
+                .extract()
+                .path("status");
     }
 }
