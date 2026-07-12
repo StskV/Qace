@@ -3,16 +3,18 @@ package tests.api;
 import adapters.ProjectAdapter;
 import api.models.project.ProjectRq;
 import api.models.project.ProjectRs;
+import com.github.javafaker.Faker;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
 public class ProjectAPITest {
 
+    private final Faker faker = new Faker();
     private final String CODE = "QA" + System.currentTimeMillis() % 100000000L;
-    private final String TITLE = "QA34";
-    private final String DESCRIPTION = "Test description";
+    private final String TITLE = faker.company().name();
+    private final String DESCRIPTION = faker.lorem().paragraph();
     private final String ACCESS = "none";
-    private final String GROUP = "Test group";
+    private final String GROUP = faker.company().industry();
 
     @Test
     public void checkProjectCRUD() {

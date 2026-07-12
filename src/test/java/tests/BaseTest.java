@@ -12,6 +12,7 @@ import org.testng.annotations.Listeners;
 import ui.pages.LoginPage;
 import ui.pages.ProjectPage;
 import ui.pages.ProjectsPage;
+import ui.pages.RepositoryPage;
 import utils.PropertyReader;
 
 import java.util.HashMap;
@@ -24,6 +25,7 @@ public class BaseTest {
     protected LoginPage loginPage;
     protected ProjectPage projectPage;
     protected ProjectsPage projectsPage;
+    protected RepositoryPage repositoryPage;
     protected String email = System.getProperty("email", PropertyReader.getProperty("email"));
     protected String password = System.getProperty("password", PropertyReader.getProperty("password"));
 
@@ -57,6 +59,7 @@ public class BaseTest {
         loginPage = new LoginPage();
         projectPage = new ProjectPage();
         projectsPage = new ProjectsPage();
+        repositoryPage = new RepositoryPage();
     }
 
     @AfterMethod(alwaysRun = true)

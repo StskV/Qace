@@ -1,6 +1,7 @@
 package api.models.testCase;
 
 import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.Data;
 
@@ -24,5 +25,8 @@ public class TestCaseRq {
     private Integer priority;
     @Expose
     private Integer isToBeAutomated;
+    @SerializedName("suite_id")
+    @Expose
+    private Integer suiteId;
 
 }

@@ -5,6 +5,7 @@ import adapters.TestCaseAdapter;
 import api.models.project.ProjectRq;
 import api.models.testCase.TestCaseRq;
 import api.models.testCase.TestCaseRs;
+import com.github.javafaker.Faker;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -12,23 +13,26 @@ import org.testng.asserts.SoftAssert;
 
 public class TestCaseAPITest {
 
+    private final Faker faker = new Faker();
     private final String CODE = "QA" + System.currentTimeMillis() % 100000000L;
-    private final String DESCRIPTION = "Test description";
-    private final String PRECONDITION = "Test precondition";
-    private final String POSTCONDITION = "Test postcondition";
-    private final String TITLE = "Test title";
-    private final int SEVERITY = 1;
-    private final int PRIORITY = 2;
-    private final int IS_TO_BE_AUTOMATED = 1;
+    private final String DESCRIPTION = faker.lorem().paragraph();
+    private final String PRECONDITION = faker.lorem().sentence();
+    private final String POSTCONDITION = faker.lorem().sentence();
+    private final String TITLE = faker.lorem().sentence(3);
+    private final int SEVERITY = faker.number().numberBetween(1, 6);
+    private final int PRIORITY = faker.number().numberBetween(1, 3);
+    private final int IS_TO_BE_AUTOMATED = faker.number().numberBetween(0, 1);
+    private final String PROJECT_DESCRIPTION = faker.lorem().sentence();
+    private final String PROJECT_GROUP = faker.company().industry();
 
     @BeforeMethod
     public void createProject() {
         ProjectRq projectRq = ProjectRq.builder()
                 .title("QA")
                 .code(CODE)
-                .description("test")
+                .description(PROJECT_DESCRIPTION)
                 .access("none")
-                .group("test")
+                .group(PROJECT_GROUP)
                 .build();
         ProjectAdapter.createProject(projectRq);
     }
@@ -57,7 +61,7 @@ public class TestCaseAPITest {
         softAssert.assertEquals(fetchedRs.result.id, createdId, "Created id mismatch");
         softAssert.assertEquals(fetchedRs.result.title, TITLE, "Created title mismatch");
 
-        String newTitle = "Updated title";
+        String newTitle = faker.lorem().sentence(3);
         TestCaseRq updateRq = TestCaseRq.builder().title(newTitle).build();
         TestCaseAdapter.updateTestCase(updateRq, CODE, createdId);
         TestCaseRs updatedRs = TestCaseAdapter.getTestCase(CODE, createdId);

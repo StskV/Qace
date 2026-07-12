@@ -6,8 +6,7 @@ import dict.MemberAccess;
 
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.*;
-import static dict.Elements.CREATE_NEW_PROJECT;
-import static dict.Elements.CREATE_PROJECT;
+import static dict.Elements.*;
 
 public class ProjectsPage extends BasePage {
 
@@ -19,6 +18,9 @@ public class ProjectsPage extends BasePage {
     private final SelenideElement createProjectButton = $(byText(CREATE_PROJECT));
     private final SelenideElement removeMenuOption = $("[data-testid=remove]");
     private final SelenideElement confirmDeleteButton = $x("//span[text()='Delete project']");
+    private final SelenideElement settingsMenuOption = $(byText(SETTINGS));
+    private final SelenideElement searchField = $("input[placeholder='Search for projects']");
+    private final SelenideElement projectLimitModalTitle = $(byText(PROJECT_LIMIT_MODAL_TITLE));
 
     public ProjectsPage openPage() {
         open("/projects");
@@ -31,14 +33,6 @@ public class ProjectsPage extends BasePage {
         return this;
     }
 
-    public ProjectPage createProject(String name, String code) {
-        createNewProject.click();
-        projectNameField.setValue(name);
-        projectCodeField.setValue(code);
-        createProjectButton.click();
-        return new ProjectPage();
-    }
-
     public ProjectPage createProject(String name, String code, MemberAccess accessType) {
         createNewProject.click();
         projectNameField.setValue(name);
@@ -46,6 +40,24 @@ public class ProjectsPage extends BasePage {
         $(byText(accessType.getLabel())).click();
         createProjectButton.click();
         return new ProjectPage();
+    }
+
+    public ProjectsPage openCreateProjectModal() {
+        createNewProject.click();
+        return this;
+    }
+
+    public ProjectsPage submitCreateProjectForm() {
+        createProjectButton.click();
+        return this;
+    }
+
+    public SelenideElement getCreateNewProjectButton() {
+        return createNewProject;
+    }
+
+    public SelenideElement getProjectNameField() {
+        return projectNameField;
     }
 
     private SelenideElement getActionMenuByProjectName(String projectName) {
@@ -59,5 +71,24 @@ public class ProjectsPage extends BasePage {
         removeMenuOption.click();
         confirmDeleteButton.click();
         return this;
+    }
+
+    public ProjectSettingsPage openProjectSettings(String project) {
+        getActionMenuByProjectName(project).click();
+        settingsMenuOption.click();
+        return new ProjectSettingsPage();
+    }
+
+    public ProjectsPage search(String query) {
+        searchField.setValue(query);
+        return this;
+    }
+
+    public SelenideElement getProjectByName(String project) {
+        return $(byText(project));
+    }
+
+    public SelenideElement getProjectLimitModalTitle() {
+        return projectLimitModalTitle;
     }
 }

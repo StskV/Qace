@@ -5,6 +5,7 @@ import adapters.TestSuiteAdapter;
 import api.models.project.ProjectRq;
 import api.models.testSuite.TestSuiteRq;
 import api.models.testSuite.TestSuiteRs;
+import com.github.javafaker.Faker;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -12,19 +13,22 @@ import org.testng.asserts.SoftAssert;
 
 public class TestSuiteAPITest {
 
+    private final Faker faker = new Faker();
     private final String CODE = "QA" + System.currentTimeMillis() % 100000000L;
-    private final String DESCRIPTION = "Test description";
-    private final String PRECONDITION = "Test precondition";
-    private final String TITLE = "Test title";
+    private final String DESCRIPTION = faker.lorem().paragraph();
+    private final String PRECONDITION = faker.lorem().sentence();
+    private final String TITLE = faker.lorem().sentence(3);
+    private final String PROJECT_DESCRIPTION = faker.lorem().sentence();
+    private final String PROJECT_GROUP = faker.company().industry();
 
     @BeforeMethod
     public void createProject() {
         ProjectRq projectRq = ProjectRq.builder()
                 .title("QA")
                 .code(CODE)
-                .description("test")
+                .description(PROJECT_DESCRIPTION)
                 .access("none")
-                .group("test")
+                .group(PROJECT_GROUP)
                 .build();
         ProjectAdapter.createProject(projectRq);
     }
@@ -49,7 +53,7 @@ public class TestSuiteAPITest {
         softAssert.assertEquals(fetchedRs.result.id, createdId, "Created id mismatch");
         softAssert.assertEquals(fetchedRs.result.title, TITLE, "Created title mismatch");
 
-        String newTitle = "Updated title";
+        String newTitle = faker.lorem().sentence(3);
         TestSuiteRq updateRq = TestSuiteRq.builder().title(newTitle).build();
         TestSuiteAdapter.updateTestSuite(updateRq, CODE, createdId);
         TestSuiteRs updatedRs = TestSuiteAdapter.getTestSuite(CODE, createdId);

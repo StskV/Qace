@@ -5,6 +5,7 @@ import adapters.ProjectAdapter;
 import api.models.defect.DefectRq;
 import api.models.defect.DefectRs;
 import api.models.project.ProjectRq;
+import com.github.javafaker.Faker;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -12,19 +13,22 @@ import org.testng.asserts.SoftAssert;
 
 public class DefectAPITest {
 
+    private final Faker faker = new Faker();
     private final String CODE = "QA" + System.currentTimeMillis() % 100000000L;
-    private final String TITLE = "Test title";
-    private final String ACTUAL_RESULT = "Test actual result";
-    private final int SEVERITY = 3;
+    private final String TITLE = faker.lorem().sentence(3);
+    private final String ACTUAL_RESULT = faker.lorem().paragraph();
+    private final int SEVERITY = faker.number().numberBetween(1, 6);
+    private final String PROJECT_DESCRIPTION = faker.lorem().sentence();
+    private final String PROJECT_GROUP = faker.company().industry();
 
     @BeforeMethod
     public void createProject() {
         ProjectRq projectRq = ProjectRq.builder()
                 .title("QA")
                 .code(CODE)
-                .description("test")
+                .description(PROJECT_DESCRIPTION)
                 .access("none")
-                .group("test")
+                .group(PROJECT_GROUP)
                 .build();
         ProjectAdapter.createProject(projectRq);
     }
@@ -49,7 +53,7 @@ public class DefectAPITest {
         softAssert.assertEquals(fetchedRs.result.id, createdId, "Created id mismatch");
         softAssert.assertEquals(fetchedRs.result.title, TITLE, "Created title mismatch");
 
-        String newTitle = "Updated title";
+        String newTitle = faker.lorem().sentence(3);
         DefectRq updateRq = DefectRq.builder().title(newTitle).build();
         DefectAdapter.updateDefect(updateRq, CODE, createdId);
         DefectRs updatedRs = DefectAdapter.getDefect(CODE, createdId);
