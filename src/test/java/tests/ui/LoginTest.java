@@ -6,7 +6,7 @@ import tests.BaseTest;
 
 public class LoginTest extends BaseTest {
 
-    private static final String INVALID_PASSWORD = "12345678";
+    private static final String INVALID_PASSWORD = "invalidPassword193";
 
     @Test
     public void checkLoginWithValidCredentials() {
