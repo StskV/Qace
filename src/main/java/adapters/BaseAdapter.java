@@ -2,6 +2,7 @@ package adapters;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import dict.Urls;
 import utils.PropertyReader;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.builder.ResponseSpecBuilder;
@@ -23,8 +24,8 @@ public class BaseAdapter {
             .create();
 
     public static RequestSpecification spec = new RequestSpecBuilder()
-            .setBaseUri("https://api.qase.io")
-            .setBasePath("/v1")
+            .setBaseUri(Urls.API_BASE_URL)
+            .setBasePath(Urls.API_BASE_PATH)
             .setContentType(ContentType.JSON)
             .addHeader("Token", token)
             .setConfig(RestAssuredConfig.config()

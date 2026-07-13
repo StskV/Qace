@@ -7,6 +7,7 @@ import dict.MemberAccess;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.*;
 import static dict.Elements.*;
+import static dict.Urls.PROJECTS_PATH;
 
 public class ProjectsPage extends BasePage {
 
@@ -23,7 +24,7 @@ public class ProjectsPage extends BasePage {
     private final SelenideElement PROJECT_LIMIT_MODAL_TITLE_LOCATOR = $(byText(PROJECT_LIMIT_MODAL_TITLE));
 
     public ProjectsPage openPage() {
-        open("/projects");
+        open(PROJECTS_PATH);
         return this;
     }
 

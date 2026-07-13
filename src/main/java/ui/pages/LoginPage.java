@@ -11,6 +11,7 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
 import static dict.Elements.INVALID_CREDENTIALS_MESSAGE;
 import static dict.Elements.SIGN_IN;
+import static dict.Urls.LOGIN_PATH;
 
 public class LoginPage extends BasePage {
 
@@ -21,7 +22,7 @@ public class LoginPage extends BasePage {
     private final SelenideElement INVALID_CREDENTIALS_MESSAGE_LOCATOR = $(byText(INVALID_CREDENTIALS_MESSAGE));
 
     public LoginPage openPage() {
-        open("/login");
+        open(LOGIN_PATH);
         return this;
     }
 

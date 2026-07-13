@@ -1,6 +1,7 @@
 package steps;
 
 import com.codeborne.selenide.Selenide;
+import dict.Urls;
 import io.qameta.allure.Step;
 import ui.pages.LoginPage;
 import ui.pages.ProjectsPage;
@@ -21,7 +22,7 @@ public class LoginStep {
                 .isPageOpened()
                 .login(email, password);
         projectsPage.isPageOpened();
-        Selenide.open("/project/" + projectCode);
+        Selenide.open(Urls.PROJECT_PATH + projectCode);
         return repositoryPage.openRepository()
                 .isPageOpened();
     }

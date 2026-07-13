@@ -2,6 +2,7 @@ package tests;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.logevents.SelenideLogger;
+import dict.Urls;
 import io.qameta.allure.selenide.AllureSelenide;
 import io.qameta.allure.testng.AllureTestNg;
 import listeners.TestListener;
@@ -32,7 +33,7 @@ public class BaseTest {
     @BeforeMethod
     public void setUp() {
         Configuration.browser = "chrome";
-        Configuration.baseUrl = "https://app.qase.io";
+        Configuration.baseUrl = Urls.BASE_URL;
         Configuration.timeout = 10000;
         Configuration.clickViaJs = true;
 //        Configuration.headless = true;
