@@ -14,11 +14,11 @@ import static dict.Elements.SIGN_IN;
 
 public class LoginPage extends BasePage {
 
-    private final SelenideElement emailLocator = $("[name=email]");
-    private final SelenideElement passwordLocator = $("[name=password]");
-    private final SelenideElement acceptCookieButton = $(shadowCss("#accept", "#usercentrics-cmp-ui"));
-    private final SelenideElement signInLocator = $(byText(SIGN_IN));
-    private final SelenideElement invalidCredentialsMessage = $(byText(INVALID_CREDENTIALS_MESSAGE));
+    private final SelenideElement EMAIL_LOCATOR = $("[name=email]");
+    private final SelenideElement PASSWORD_LOCATOR = $("[name=password]");
+    private final SelenideElement ACCEPT_COOKIE_BUTTON = $(shadowCss("#accept", "#usercentrics-cmp-ui"));
+    private final SelenideElement SIGN_IN_LOCATOR = $(byText(SIGN_IN));
+    private final SelenideElement INVALID_CREDENTIALS_MESSAGE_LOCATOR = $(byText(INVALID_CREDENTIALS_MESSAGE));
 
     public LoginPage openPage() {
         open("/login");
@@ -27,21 +27,21 @@ public class LoginPage extends BasePage {
 
     @Override
     public LoginPage isPageOpened() {
-        signInLocator.shouldBe(Condition.visible);
+        SIGN_IN_LOCATOR.shouldBe(Condition.visible);
         return this;
     }
 
     public ProjectsPage login(String email, String password) {
-        if (acceptCookieButton.is(Condition.visible, Duration.ofSeconds(5))) {
-            acceptCookieButton.click();
+        if (ACCEPT_COOKIE_BUTTON.is(Condition.visible, Duration.ofSeconds(5))) {
+            ACCEPT_COOKIE_BUTTON.click();
         }
-        emailLocator.setValue(email);
-        passwordLocator.setValue(password);
-        signInLocator.click();
+        EMAIL_LOCATOR.setValue(email);
+        PASSWORD_LOCATOR.setValue(password);
+        SIGN_IN_LOCATOR.click();
         return new ProjectsPage();
     }
 
     public SelenideElement getInvalidCredentialsMessage() {
-        return invalidCredentialsMessage;
+        return INVALID_CREDENTIALS_MESSAGE_LOCATOR;
     }
 }

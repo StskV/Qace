@@ -13,7 +13,6 @@ public class Result extends BaseResult {
     @SerializedName("actual_result")
     @Expose
     public String actualResult;
-    @SerializedName("severity")
     @Expose
     public String severity;
 }

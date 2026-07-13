@@ -13,41 +13,51 @@ import static com.codeborne.selenide.Selenide.$$;
 
 public class RepositoryPage extends BasePage {
 
-    private final SelenideElement repositoryNavLink = $(byText("Repository"));
-    private final SelenideElement manualTestButton = $(byText("Manual test"));
-    private final SelenideElement projectActionsMenuButton = $("button[aria-label='Show project actions menu']");
-    private final SelenideElement trashBinLink = $(byText("Trash bin"));
-    private final SelenideElement restoreSelectedButton = $(byText("Restore selected"));
-
-    private final SelenideElement createNewSuiteLink = $(byText("Create new suite"));
-    private final SelenideElement suiteTitleField = $("#title");
-    private final SelenideElement suiteDescriptionField = $("#description");
-    private final SelenideElement suitePreconditionsField = $("#preconditions");
-    private final SelenideElement quickTestButton = $(byText("Quick test"));
-    private final SelenideElement quickTestTitleField = $("input[placeholder='Test case title']");
-    private final SelenideElement caseTitleField = $("input[placeholder='For example: Authorization']");
+    private final SelenideElement REPOSITORY_NAV_LINK = $(byText("Repository"));
+    private final SelenideElement MANUAL_TEST_BUTTON = $(byText("Manual test"));
+    private final SelenideElement PROJECT_ACTIONS_MENU_BUTTON = $("button[aria-label='Show project actions menu']");
+    private final SelenideElement TRASH_BIN_LINK = $(byText("Trash bin"));
+    private final SelenideElement RESTORE_SELECTED_BUTTON = $(byText("Restore selected"));
+    private final SelenideElement CREATE_NEW_SUITE_LINK = $(byText("Create new suite"));
+    private final SelenideElement SUITE_TITLE_FIELD = $("#title");
+    private final SelenideElement SUITE_DESCRIPTION_FIELD = $("#description");
+    private final SelenideElement SUITE_PRECONDITIONS_FIELD = $("#preconditions");
+    private final SelenideElement QUICK_TEST_BUTTON = $(byText("Quick test"));
+    private final SelenideElement QUICK_TEST_TITLE_FIELD = $("input[placeholder='Test case title']");
+    private final SelenideElement CASE_TITLE_FIELD = $("input[placeholder='For example: Authorization']");
+    private final SelenideElement CREATE_BUTTON = $$("button").findBy(exactText("Create"));
+    private final SelenideElement DUPLICATE_MENU_OPTION = $(byText("Duplicate"));
+    private final SelenideElement CLONE_BUTTON = $$("button").findBy(exactText("Clone"));
+    private final SelenideElement DELETE_MENU_OPTION = $(byText("Delete"));
+    private final SelenideElement CONFIRM_DELETE_BUTTON = $$("button").findBy(exactText("Delete"));
+    private final SelenideElement UNSORTED_CASES_FOLDER = $(byText("Test cases without suite"));
+    private final SelenideElement TO_BE_AUTOMATED_CHECKBOX = $(byText("To be automated")).parent().find("input[type='checkbox']");
+    private final SelenideElement SAVE_BUTTON = $$("button").findBy(exactText("Save"));
+    private final SelenideElement DELETE_SELECTED_BUTTON = $("button[aria-label='Delete']");
+    private final SelenideElement CONFIRM_DELETE_INPUT = $("input[placeholder='Type CONFIRM to continue']");
+    private final SelenideElement PAGE_BODY = $("body");
 
     private static final String[] SEVERITY_LABELS =
             {"Undefined", "Blocker", "Critical", "Major", "Normal", "Minor", "Trivial"};
     private static final String[] PRIORITY_LABELS = {"Not set", "Low", "Medium", "High"};
 
     public RepositoryPage openRepository() {
-        repositoryNavLink.click();
+        REPOSITORY_NAV_LINK.click();
         return this;
     }
 
     @Override
     public RepositoryPage isPageOpened() {
-        manualTestButton.shouldBe(Condition.visible);
+        MANUAL_TEST_BUTTON.shouldBe(Condition.visible);
         return this;
     }
 
     public RepositoryPage createSuite(Suite data) {
-        createNewSuiteLink.click();
-        suiteTitleField.setValue(data.getTitle());
-        suiteDescriptionField.setValue(data.getDescription());
-        suitePreconditionsField.setValue(data.getPreconditions());
-        $$("button").findBy(exactText("Create")).click();
+        CREATE_NEW_SUITE_LINK.click();
+        SUITE_TITLE_FIELD.setValue(data.getTitle());
+        SUITE_DESCRIPTION_FIELD.setValue(data.getDescription());
+        SUITE_PRECONDITIONS_FIELD.setValue(data.getPreconditions());
+        CREATE_BUTTON.click();
         return this;
     }
 
@@ -62,15 +72,15 @@ public class RepositoryPage extends BasePage {
 
     public RepositoryPage duplicateSuite(String suiteName) {
         openSuiteActionMenu(suiteName);
-        $(byText("Duplicate")).click();
-        $$("button").findBy(exactText("Clone")).click();
+        DUPLICATE_MENU_OPTION.click();
+        CLONE_BUTTON.click();
         return this;
     }
 
     public RepositoryPage deleteSuite(String suiteName) {
         openSuiteActionMenu(suiteName);
-        $(byText("Delete")).click();
-        $$("button").findBy(exactText("Delete")).click();
+        DELETE_MENU_OPTION.click();
+        CONFIRM_DELETE_BUTTON.click();
         return this;
     }
 
@@ -80,18 +90,18 @@ public class RepositoryPage extends BasePage {
     }
 
     public RepositoryPage openUnsortedCases() {
-        $(byText("Test cases without suite")).click();
+        UNSORTED_CASES_FOLDER.click();
         return this;
     }
 
     public RepositoryPage createQuickTestCase(String title) {
-        quickTestButton.click();
-        quickTestTitleField.setValue(title).pressEnter();
+        QUICK_TEST_BUTTON.click();
+        QUICK_TEST_TITLE_FIELD.setValue(title).pressEnter();
         return this;
     }
 
     public RepositoryPage openManualTestForm() {
-        manualTestButton.click();
+        MANUAL_TEST_BUTTON.click();
         return this;
     }
 
@@ -105,16 +115,16 @@ public class RepositoryPage extends BasePage {
     }
 
     public RepositoryPage saveTestCase(TestCase data) {
-        caseTitleField.setValue(data.getTitle());
+        CASE_TITLE_FIELD.setValue(data.getTitle());
         getRichTextFieldByLabel("Description").setValue(data.getDescription());
         getRichTextFieldByLabel("Pre-conditions").setValue(data.getPreconditions());
         selectDropdownOption("Severity", SEVERITY_LABELS[data.getSeverity()]);
         selectDropdownOption("Priority", PRIORITY_LABELS[data.getPriority()]);
         if (Integer.valueOf(1).equals(data.getIsToBeAutomated())) {
-            clickViaJs($(byText("To be automated")).parent().find("input[type='checkbox']"));
+            clickViaJs(TO_BE_AUTOMATED_CHECKBOX);
         }
-        $$("button").findBy(exactText("Save")).click();
-        caseTitleField.shouldNotBe(Condition.visible);
+        SAVE_BUTTON.click();
+        CASE_TITLE_FIELD.shouldNotBe(Condition.visible);
         return this;
     }
 
@@ -136,21 +146,21 @@ public class RepositoryPage extends BasePage {
     }
 
     public RepositoryPage deleteSelectedCases() {
-        $("button[aria-label='Delete']").click();
-        $("input[placeholder='Type CONFIRM to continue']").setValue("CONFIRM");
-        $$("button").findBy(exactText("Delete")).click();
+        DELETE_SELECTED_BUTTON.click();
+        CONFIRM_DELETE_INPUT.setValue("CONFIRM");
+        CONFIRM_DELETE_BUTTON.click();
         return this;
     }
 
     public RepositoryPage openTrashBin() {
-        projectActionsMenuButton.click();
-        trashBinLink.click();
+        PROJECT_ACTIONS_MENU_BUTTON.click();
+        TRASH_BIN_LINK.click();
         return this;
     }
 
     public RepositoryPage restoreSelectedCase(String caseTitle) {
         clickViaJs(getTrashCaseCheckbox(caseTitle));
-        restoreSelectedButton.click();
+        RESTORE_SELECTED_BUTTON.click();
         return this;
     }
 
@@ -163,6 +173,6 @@ public class RepositoryPage extends BasePage {
     }
 
     public SelenideElement getPageBody() {
-        return $("body");
+        return PAGE_BODY;
     }
 }

@@ -6,15 +6,15 @@ import com.codeborne.selenide.SelenideElement;
 import static com.codeborne.selenide.Selenide.$;
 
 public class ProjectPage extends BasePage {
-    private final SelenideElement projectTitle = $("h1");
+    private final SelenideElement PROJECT_TITLE = $("h1");
 
     @Override
     public ProjectPage isPageOpened() {
-        projectTitle.shouldBe(Condition.visible);
+        PROJECT_TITLE.shouldBe(Condition.visible);
         return this;
     }
 
     public SelenideElement getProjectTitle() {
-        return projectTitle;
+        return PROJECT_TITLE;
     }
 }

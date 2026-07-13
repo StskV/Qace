@@ -10,18 +10,18 @@ import static dict.Elements.ARCHIVE_SUCCESS_MESSAGE;
 
 public class ProjectSettingsPage extends BasePage {
 
-    private final SelenideElement archiveProjectLink = $(byText(ARCHIVE_PROJECT));
-    private final SelenideElement archiveSuccessMessage = $(byText(ARCHIVE_SUCCESS_MESSAGE));
+    private final SelenideElement ARCHIVE_PROJECT_LINK = $(byText(ARCHIVE_PROJECT));
+    private final SelenideElement ARCHIVE_SUCCESS_MESSAGE_LOCATOR = $(byText(ARCHIVE_SUCCESS_MESSAGE));
 
     @Override
     public ProjectSettingsPage isPageOpened() {
-        archiveProjectLink.shouldBe(Condition.visible);
+        ARCHIVE_PROJECT_LINK.shouldBe(Condition.visible);
         return this;
     }
 
     public ProjectSettingsPage archiveProject() {
-        archiveProjectLink.click();
-        archiveSuccessMessage.shouldBe(Condition.visible);
+        ARCHIVE_PROJECT_LINK.click();
+        ARCHIVE_SUCCESS_MESSAGE_LOCATOR.shouldBe(Condition.visible);
         return this;
     }
 }
