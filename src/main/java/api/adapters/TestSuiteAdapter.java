@@ -1,7 +1,8 @@
-package adapters;
+package api.adapters;
 
 import api.models.testSuite.TestSuiteRq;
 import api.models.testSuite.TestSuiteRs;
+import dict.Urls;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
@@ -11,10 +12,11 @@ public class TestSuiteAdapter extends BaseAdapter {
     public static TestSuiteRs createTestSuite(TestSuiteRq rq, String code) {
         return given()
                 .spec(spec)
+                .pathParam("code", code)
                 .body(rq)
                 .log().all()
                 .when()
-                .post("/suite/" + code)
+                .post(Urls.SUITE_BY_CODE_ENDPOINT)
                 .then()
                 .log().all()
                 .body(matchesJsonSchemaInClasspath("schemas/create_test_suite.schema.json"))
@@ -29,7 +31,7 @@ public class TestSuiteAdapter extends BaseAdapter {
                 .pathParam("code", code)
                 .pathParam("id", id)
                 .when()
-                .get("/suite/{code}/{id}")
+                .get(Urls.SUITE_BY_ID_ENDPOINT)
                 .then()
                 .body(matchesJsonSchemaInClasspath("schemas/get_test_suite.schema.json"))
                 .spec(ok200)
@@ -44,7 +46,7 @@ public class TestSuiteAdapter extends BaseAdapter {
                 .pathParam("id", id)
                 .body(rq)
                 .when()
-                .patch("/suite/{code}/{id}")
+                .patch(Urls.SUITE_BY_ID_ENDPOINT)
                 .then()
                 .body(matchesJsonSchemaInClasspath("schemas/id_result.schema.json"))
                 .spec(ok200)
@@ -58,7 +60,7 @@ public class TestSuiteAdapter extends BaseAdapter {
                 .pathParam("code", code)
                 .pathParam("id", id)
                 .when()
-                .delete("/suite/{code}/{id}")
+                .delete(Urls.SUITE_BY_ID_ENDPOINT)
                 .then()
                 .body(matchesJsonSchemaInClasspath("schemas/id_result.schema.json"))
                 .spec(ok200)

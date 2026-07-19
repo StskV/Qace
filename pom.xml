@@ -22,6 +22,8 @@
         <javafaker.version>1.0.2</javafaker.version>
         <surefire-plugin.version>3.5.5</surefire-plugin.version>
         <allure-maven-plugin.version>2.12.0</allure-maven-plugin.version>
+        <log4j.version>2.24.1</log4j.version>
+        <suiteXmlFile>src/test/resources/allTests.xml</suiteXmlFile>
     </properties>
 
     <dependencyManagement>
@@ -53,7 +55,6 @@
         <dependency>
             <groupId>io.qameta.allure</groupId>
             <artifactId>allure-testng</artifactId>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.aspectj</groupId>
@@ -94,11 +95,24 @@
             <version>${rest-assured.version}</version>
             <scope>compile</scope>
         </dependency>
+        <!-- Source: https://mvnrepository.com/artifact/io.qameta.allure/allure-rest-assured -->
+        <dependency>
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-rest-assured</artifactId>
+            <scope>compile</scope>
+        </dependency>
         <!-- Source: https://mvnrepository.com/artifact/com.github.javafaker/javafaker -->
         <dependency>
             <groupId>com.github.javafaker</groupId>
             <artifactId>javafaker</artifactId>
             <version>${javafaker.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <!-- Source: https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>${log4j.version}</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>
@@ -113,6 +127,9 @@
                     <argLine>
                         -javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"
                     </argLine>
+                    <suiteXmlFiles>
+                        <suiteXmlFile>${suiteXmlFile}</suiteXmlFile>
+                    </suiteXmlFiles>
                 </configuration>
             </plugin>
             <plugin>

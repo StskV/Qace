@@ -1,12 +1,21 @@
 package tests.api;
 
-import adapters.ProjectAdapter;
+import api.adapters.ProjectAdapter;
 import api.models.project.ProjectRq;
 import api.models.project.ProjectRs;
 import com.github.javafaker.Faker;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Owner;
+import io.qameta.allure.Severity;
+import io.qameta.allure.SeverityLevel;
+import io.qameta.allure.Story;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
+@Owner("Satsiuk Viktoriya")
+@Epic("Qase API")
+@Feature("Project API")
 public class ProjectAPITest {
 
     private final Faker faker = new Faker();
@@ -16,7 +25,13 @@ public class ProjectAPITest {
     private final String ACCESS = "none";
     private final String GROUP = faker.company().industry();
 
-    @Test
+    @Test(
+            description = "Verify a project can be created, read, and deleted via the API",
+            testName = "Project CRUD via API",
+            groups = "api"
+    )
+    @Story("Project CRUD via API")
+    @Severity(SeverityLevel.CRITICAL)
     public void checkProjectCRUD() {
         SoftAssert softAssert = new SoftAssert();
 

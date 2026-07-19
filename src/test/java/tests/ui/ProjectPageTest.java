@@ -1,17 +1,26 @@
 package tests.ui;
 
+import api.steps.ProjectStep;
+import api.steps.SuiteStep;
+import api.steps.TestCaseStep;
 import com.codeborne.selenide.Condition;
+import dto.SuiteFactory;
+import dto.TestCaseFactory;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Owner;
+import io.qameta.allure.Severity;
+import io.qameta.allure.SeverityLevel;
+import io.qameta.allure.Story;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import dto.SuiteFactory;
-import dto.TestCaseFactory;
-import steps.LoginStep;
-import steps.ProjectStep;
-import steps.SuiteStep;
-import steps.TestCaseStep;
-import tests.BaseTest;
+import tests.base.BaseTest;
+import ui.steps.LoginStep;
 
+@Owner("Satsiuk Viktoriya")
+@Epic("Qase UI")
+@Feature("Repository Page")
 public class ProjectPageTest extends BaseTest {
 
     private String projectCode;
@@ -22,7 +31,13 @@ public class ProjectPageTest extends BaseTest {
         ProjectStep.createProjectViaApi("Project Page Test", projectCode);
     }
 
-    @Test
+    @Test(
+            description = "Verify a new suite can be created",
+            testName = "Create suite",
+            groups = "smoke"
+    )
+    @Story("Create suite")
+    @Severity(SeverityLevel.CRITICAL)
     public void checkCreateNewSuite() {
         String suiteName = "New Suite";
         LoginStep.loginAndOpenRepository(loginPage, projectsPage, repositoryPage, email, password, projectCode)
@@ -31,7 +46,13 @@ public class ProjectPageTest extends BaseTest {
                         Condition.visible.because("Created suite " + suiteName + " is not displayed in the repository"));
     }
 
-    @Test
+    @Test(
+            description = "Verify a suite can be duplicated",
+            testName = "Duplicate suite",
+            groups = "regression"
+    )
+    @Story("Duplicate suite")
+    @Severity(SeverityLevel.NORMAL)
     public void checkDuplicateSuite() {
         String suiteName = "Suite To Duplicate";
         SuiteStep.createSuiteViaApi(projectCode, suiteName);
@@ -40,7 +61,13 @@ public class ProjectPageTest extends BaseTest {
                 .getPageBody().shouldHave(Condition.text("2 suites").because("Suite count should be 2 after duplicating"));
     }
 
-    @Test
+    @Test(
+            description = "Verify a suite can be deleted",
+            testName = "Delete suite",
+            groups = "regression"
+    )
+    @Story("Delete suite")
+    @Severity(SeverityLevel.NORMAL)
     public void checkDeleteSuite() {
         String suiteName = "Suite To Delete";
         SuiteStep.createSuiteViaApi(projectCode, suiteName);
@@ -49,7 +76,13 @@ public class ProjectPageTest extends BaseTest {
                 .getSuiteByName(suiteName).shouldNotBe(Condition.visible.because("Suite " + suiteName + " was not deleted"));
     }
 
-    @Test
+    @Test(
+            description = "Verify a quick test case can be created",
+            testName = "Create quick test case",
+            groups = "smoke"
+    )
+    @Story("Create quick test case")
+    @Severity(SeverityLevel.CRITICAL)
     public void checkCreateQuickTestCase() {
         String suiteName = "Suite For Quick Case";
         String caseTitle = "Quick case";
@@ -60,7 +93,13 @@ public class ProjectPageTest extends BaseTest {
                 .getCaseByTitle(caseTitle).shouldBe(Condition.visible.because("Quick test case " + caseTitle + " is not displayed"));
     }
 
-    @Test
+    @Test(
+            description = "Verify a new test case can be created",
+            testName = "Create test case",
+            groups = "smoke"
+    )
+    @Story("Create test case")
+    @Severity(SeverityLevel.CRITICAL)
     public void checkCreateNewTestCase() {
         String caseTitle = "New test case";
         LoginStep.loginAndOpenRepository(loginPage, projectsPage, repositoryPage, email, password, projectCode)
@@ -71,7 +110,13 @@ public class ProjectPageTest extends BaseTest {
                 .getCaseByTitle(caseTitle).shouldBe(Condition.visible.because("New test case " + caseTitle + " is not displayed"));
     }
 
-    @Test
+    @Test(
+            description = "Verify a test case can be deleted",
+            testName = "Delete test case",
+            groups = "regression"
+    )
+    @Story("Delete test case")
+    @Severity(SeverityLevel.NORMAL)
     public void checkDeleteTestCase() {
         String suiteName = "Suite For Delete Case";
         String caseTitle = "Case to delete";
@@ -85,7 +130,13 @@ public class ProjectPageTest extends BaseTest {
                         Condition.visible.because("Deleted test case " + caseTitle + " should not be displayed"));
     }
 
-    @Test
+    @Test(
+            description = "Verify a deleted test case can be restored from the trash bin back",
+            testName = "Restore test case",
+            groups = "regression"
+    )
+    @Story("Restore test case")
+    @Severity(SeverityLevel.NORMAL)
     public void checkRestoreTestCase() {
         String suiteName = "Suite For Restore Case";
         String caseTitle = "Case to restore";

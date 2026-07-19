@@ -1,16 +1,24 @@
 package tests.api;
 
-import adapters.ProjectAdapter;
-import adapters.TestSuiteAdapter;
-import api.models.project.ProjectRq;
+import api.adapters.TestSuiteAdapter;
+import api.steps.ProjectStep;
 import api.models.testSuite.TestSuiteRq;
 import api.models.testSuite.TestSuiteRs;
 import com.github.javafaker.Faker;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Owner;
+import io.qameta.allure.Severity;
+import io.qameta.allure.SeverityLevel;
+import io.qameta.allure.Story;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
+@Owner("Satsiuk Viktoriya")
+@Epic("Qase API")
+@Feature("Test Suite API")
 public class TestSuiteAPITest {
 
     private final Faker faker = new Faker();
@@ -18,22 +26,19 @@ public class TestSuiteAPITest {
     private final String DESCRIPTION = faker.lorem().paragraph();
     private final String PRECONDITION = faker.lorem().sentence();
     private final String TITLE = faker.lorem().sentence(3);
-    private final String PROJECT_DESCRIPTION = faker.lorem().sentence();
-    private final String PROJECT_GROUP = faker.company().industry();
 
     @BeforeMethod
     public void createProject() {
-        ProjectRq projectRq = ProjectRq.builder()
-                .title("QA")
-                .code(CODE)
-                .description(PROJECT_DESCRIPTION)
-                .access("none")
-                .group(PROJECT_GROUP)
-                .build();
-        ProjectAdapter.createProject(projectRq);
+        ProjectStep.createProjectViaApi("QA", CODE);
     }
 
-    @Test
+    @Test(
+            description = "Verify a test suite can be created, read, updated, and deleted via the API",
+            testName = "Test suite CRUD via API",
+            groups = "api"
+    )
+    @Story("Test suite CRUD via API")
+    @Severity(SeverityLevel.CRITICAL)
     public void checkTestSuiteCRUD() {
         SoftAssert softAssert = new SoftAssert();
 
@@ -71,6 +76,6 @@ public class TestSuiteAPITest {
 
     @AfterMethod
     public void deleteProject() {
-        ProjectAdapter.deleteProject(CODE);
+        ProjectStep.cleanupProjectViaApi(CODE);
     }
 }

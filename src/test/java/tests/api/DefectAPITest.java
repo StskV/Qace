@@ -1,16 +1,24 @@
 package tests.api;
 
-import adapters.DefectAdapter;
-import adapters.ProjectAdapter;
+import api.adapters.DefectAdapter;
+import api.steps.ProjectStep;
 import api.models.defect.DefectRq;
 import api.models.defect.DefectRs;
-import api.models.project.ProjectRq;
 import com.github.javafaker.Faker;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Owner;
+import io.qameta.allure.Severity;
+import io.qameta.allure.SeverityLevel;
+import io.qameta.allure.Story;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
+@Owner("Satsiuk Viktoriya")
+@Epic("Qase API")
+@Feature("Defect API")
 public class DefectAPITest {
 
     private final Faker faker = new Faker();
@@ -18,29 +26,26 @@ public class DefectAPITest {
     private final String TITLE = faker.lorem().sentence(3);
     private final String ACTUAL_RESULT = faker.lorem().paragraph();
     private final int SEVERITY = faker.number().numberBetween(1, 6);
-    private final String PROJECT_DESCRIPTION = faker.lorem().sentence();
-    private final String PROJECT_GROUP = faker.company().industry();
 
     @BeforeMethod
     public void createProject() {
-        ProjectRq projectRq = ProjectRq.builder()
-                .title("QA")
-                .code(CODE)
-                .description(PROJECT_DESCRIPTION)
-                .access("none")
-                .group(PROJECT_GROUP)
-                .build();
-        ProjectAdapter.createProject(projectRq);
+        ProjectStep.createProjectViaApi("QA", CODE);
     }
 
-    @Test
+    @Test(
+            description = "Verify a defect can be created, read, updated, and deleted via the API",
+            testName = "Defect CRUD via API",
+            groups = "api"
+    )
+    @Story("Defect CRUD via API")
+    @Severity(SeverityLevel.CRITICAL)
     public void checkDefectCRUD() {
         SoftAssert softAssert = new SoftAssert();
 
         DefectRq rq = DefectRq.builder()
                 .code(CODE)
                 .title(TITLE)
-                .actual_result(ACTUAL_RESULT)
+                .actualResult(ACTUAL_RESULT)
                 .severity(SEVERITY)
                 .build();
         DefectRs rs = DefectAdapter.createDefect(rq, CODE);
@@ -72,6 +77,6 @@ public class DefectAPITest {
 
     @AfterMethod
     public void deleteProject() {
-        ProjectAdapter.deleteProject(CODE);
+        ProjectStep.cleanupProjectViaApi(CODE);
     }
 }

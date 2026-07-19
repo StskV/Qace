@@ -1,8 +1,9 @@
-package adapters;
+package api.adapters;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dict.Urls;
+import io.qameta.allure.restassured.AllureRestAssured;
 import utils.PropertyReader;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.builder.ResponseSpecBuilder;
@@ -34,6 +35,7 @@ public class BaseAdapter {
                             .gsonObjectMapperFactory((cls, charset) -> gson))
                     .logConfig(LogConfig.logConfig()
                             .enableLoggingOfRequestAndResponseIfValidationFails()))
+            .addFilter(new AllureRestAssured())
             .build();
 
     public static ResponseSpecification ok200 = new ResponseSpecBuilder()

@@ -1,104 +1,150 @@
 package tests.ui;
 
+import api.steps.ProjectStep;
 import com.codeborne.selenide.Condition;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Owner;
+import io.qameta.allure.Severity;
+import io.qameta.allure.SeverityLevel;
+import io.qameta.allure.Story;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-import steps.LoginStep;
-import steps.ProjectStep;
-import tests.BaseTest;
+import tests.base.BaseTest;
+import ui.steps.LoginStep;
 
 import static dict.MemberAccess.DONT_ADD_MEMBERS;
 
+@Owner("Satsiuk Viktoriya")
+@Epic("Qase UI")
+@Feature("Projects")
 public class ProjectsPageTest extends BaseTest {
 
-    private final String CODE = "QA" + (System.currentTimeMillis() % 100000);
+    private static final String PROJECT_NAME = "Projects Page Test";
 
-    @Test
+    private String projectCode;
+    private String extraCode;
+
+    @BeforeMethod
+    public void createProject() {
+        extraCode = null;
+        projectCode = "QA" + (System.currentTimeMillis() % 100000);
+        ProjectStep.createProjectViaApi(PROJECT_NAME, projectCode);
+    }
+
+    @Test(
+            description = "Verify a new project can be created",
+            testName = "Create project",
+            groups = "smoke"
+    )
+    @Story("Create project")
+    @Severity(SeverityLevel.CRITICAL)
     public void checkCreateProject() {
         String name = "New Project";
-        try {
-            LoginStep.loginAndOpenProjects(loginPage, projectsPage, email, password)
-                    .createProject(name, CODE, DONT_ADD_MEMBERS)
-                    .isPageOpened()
-                    .getProjectTitle().shouldHave(
-                            Condition.text(CODE).because("New Project title should be displayed"));
-        } finally {
-            ProjectStep.cleanupProjectViaApi(CODE);
-        }
+        extraCode = "QAC" + (System.currentTimeMillis() % 100000);
+        LoginStep.loginAndOpenProjects(loginPage, projectsPage, email, password)
+                .createProject(name, extraCode, DONT_ADD_MEMBERS)
+                .isPageOpened()
+                .getProjectTitle().shouldHave(
+                        Condition.text(extraCode).because("New Project title should be displayed"));
     }
 
-    @Test
+    @Test(
+            description = "Verify a project can be deleted",
+            testName = "Delete project",
+            groups = "smoke"
+    )
+    @Story("Delete project")
+    @Severity(SeverityLevel.CRITICAL)
     public void checkDeleteProject() {
-        String name = "Project To Delete";
-        ProjectStep.createProjectViaApi(name, CODE);
-        try {
-            LoginStep.loginAndOpenProjects(loginPage, projectsPage, email, password)
-                    .deleteProject(name)
-                    .getProjectByName(name).shouldNotBe(
-                            Condition.visible.because("Project " + name + " should not be displayed after being deleted"));
-        } finally {
-            ProjectStep.cleanupProjectViaApi(CODE);
-        }
+        LoginStep.loginAndOpenProjects(loginPage, projectsPage, email, password)
+                .deleteProject(PROJECT_NAME)
+                .getProjectByName(PROJECT_NAME).shouldNotBe(
+                        Condition.visible.because("Project " + PROJECT_NAME + " should not be displayed after being deleted"));
     }
 
-    @Test
-    public void checkCreateProjectWithEmptyFields() {
+    @DataProvider(name = "incompleteProjectData")
+    public Object[][] incompleteProjectData() {
+        return new Object[][]{
+                {"", ""},
+                {"Only Name", ""},
+                {"", "ONLYCODE"}
+        };
+    }
+
+    @Test(
+            dataProvider = "incompleteProjectData",
+            description = "Verify the create project modal stays open when the name and/or code are empty",
+            testName = "Create project with incomplete data",
+            groups = "regression"
+    )
+    @Story("Create project with incomplete data")
+    @Severity(SeverityLevel.NORMAL)
+    public void checkCreateProjectWithEmptyFields(String name, String code) {
         LoginStep.loginAndOpenProjects(loginPage, projectsPage, email, password)
                 .openCreateProjectModal()
+                .fillProjectForm(name, code)
                 .submitCreateProjectForm()
                 .getProjectNameField().shouldBe(
-                        Condition.visible.because("Create project modal should stay open"));
+                        Condition.visible.because("Create project modal should stay open when name=" + name + ", code=" + code));
     }
 
-    @Test
+    @Test(
+            description = "Verify the project limit modal is displayed after trying to create a 3rd project",
+            testName = "Project creation limit",
+            groups = "regression"
+    )
+    @Story("Project creation limit")
+    @Severity(SeverityLevel.NORMAL)
     public void checkProjectCreationLimit() {
-        String firstName = "Limit Test 1";
-        String fitstCode = "QA1" + (System.currentTimeMillis() % 100000);
-        String secondName = "Limit Test 2";
-        String secondCode = "QA2" + (System.currentTimeMillis() % 100000);
-        try {
-            LoginStep.loginAndOpenProjects(loginPage, projectsPage, email, password)
-                    .createProject(firstName, fitstCode, DONT_ADD_MEMBERS)
-                    .isPageOpened();
-            projectsPage.openPage().isPageOpened()
-                    .createProject(secondName, secondCode, DONT_ADD_MEMBERS)
-                    .isPageOpened();
-            projectsPage.openPage().isPageOpened()
-                    .openCreateProjectModal()
-                    .getProjectLimitModalTitle().shouldBe(
-                            Condition.visible.because("Project limit modal is not displayed after trying to create 3rd projects"));
-        } finally {
-            ProjectStep.cleanupProjectViaApi(fitstCode);
-            ProjectStep.cleanupProjectViaApi(secondCode);
-        }
+        String name = "Limit Test";
+        extraCode = "QAL" + (System.currentTimeMillis() % 100000);
+        LoginStep.loginAndOpenProjects(loginPage, projectsPage, email, password)
+                .createProject(name, extraCode, DONT_ADD_MEMBERS)
+                .isPageOpened();
+        projectsPage.openPage().isPageOpened()
+                .openCreateProjectModal()
+                .getProjectLimitModalTitle().shouldBe(
+                        Condition.visible.because("Project limit modal is not displayed after trying to create a 3rd project"));
     }
 
-    @Test
+    @Test(
+            description = "Verify an archived project disappears from the projects list",
+            testName = "Archive project",
+            groups = "regression"
+    )
+    @Story("Archive project")
+    @Severity(SeverityLevel.NORMAL)
     public void checkArchiveProject() {
-        String name = "Project To Archive";
-        ProjectStep.createProjectViaApi(name, CODE);
-        try {
-            LoginStep.loginAndOpenProjects(loginPage, projectsPage, email, password)
-                    .openProjectSettings(name)
-                    .archiveProject();
-            projectsPage.openPage().isPageOpened()
-                    .getProjectByName(name).shouldNotBe(
-                            Condition.visible.because("Archived project " + name + " should not be displayed"));
-        } finally {
-            ProjectStep.cleanupProjectViaApi(CODE);
-        }
+        LoginStep.loginAndOpenProjects(loginPage, projectsPage, email, password)
+                .openProjectSettings(PROJECT_NAME)
+                .archiveProject();
+        projectsPage.openPage().isPageOpened()
+                .getProjectByName(PROJECT_NAME).shouldNotBe(
+                        Condition.visible.because("Archived project " + PROJECT_NAME + " should not be displayed"));
     }
 
-    @Test
+    @Test(
+            description = "Verify a project can be found in the projects list by searching its name",
+            testName = "Search project by name",
+            groups = "regression"
+    )
+    @Story("Search project by name")
+    @Severity(SeverityLevel.MINOR)
     public void checkSearchProjectByName() {
-        String name = "Project To Search" + (System.currentTimeMillis() % 100000);
-        ProjectStep.createProjectViaApi(name, CODE);
-        try {
-            LoginStep.loginAndOpenProjects(loginPage, projectsPage, email, password)
-                    .search(name)
-                    .getProjectByName(name).shouldBe(
-                            Condition.visible.because("Project " + name + " is not displayed in search results"));
-        } finally {
-            ProjectStep.cleanupProjectViaApi(CODE);
+        LoginStep.loginAndOpenProjects(loginPage, projectsPage, email, password)
+                .search(PROJECT_NAME)
+                .getProjectByName(PROJECT_NAME).shouldBe(
+                        Condition.visible.because("Project " + PROJECT_NAME + " is not displayed in search results"));
+    }
+
+    @AfterMethod(alwaysRun = true)
+    public void deleteProject() {
+        ProjectStep.cleanupProjectViaApi(projectCode);
+        if (extraCode != null) {
+            ProjectStep.cleanupProjectViaApi(extraCode);
         }
     }
 }

@@ -1,11 +1,11 @@
-package listeners;
+package utils;
 
 import org.testng.IRetryAnalyzer;
 import org.testng.ITestResult;
 
-public class RetryAnalyzer implements IRetryAnalyzer {
+public class Retry implements IRetryAnalyzer {
 
-    private static final int MAX_RETRY_COUNT = 2;
+    private static final int MAX_RETRY_COUNT = 1;
     private int retryCount = 0;
 
     @Override

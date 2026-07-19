@@ -23,12 +23,13 @@ This checklist describes the UI and API test scenarios covered by the automation
 ### UI Test Coverage
 #### 1. Login page
 1. Log in with valid credentials
-2. Log in with invalid credentials
+2. Log in with invalid credentials (wrong password)
+3. Log in with empty fields (empty email, empty password, both empty)
 
 #### 2. Projects page
 1. Create new project
 2. Delete project
-3. Create project with empty fields
+3. Create project with empty fields (both empty, name only, code only)
 4. Check project creation limit
 5. Archive project
 6. Search for project by name
@@ -45,9 +46,8 @@ This checklist describes the UI and API test scenarios covered by the automation
 #### 4. Defects page
 1. Create new defect
 2. Create defect with empty fields
-3. Change defect status to 'In Progress'
-4. Change defect status to 'Resolved'
-5. Delete defect
+3. Change defect status ('In Progress', 'Resolved', 'Invalid')
+4. Delete defect
 
 #### 5. Project settings
 1. Change project name

@@ -1,9 +1,11 @@
 package dto;
 
 import com.github.javafaker.Faker;
+import lombok.experimental.UtilityClass;
 
+@UtilityClass
 public class TestCaseFactory {
-    public static TestCase getTestCase(String title) {
+    public TestCase getTestCase(String title) {
         Faker faker = new Faker();
         return TestCase.builder()
                 .title(title)

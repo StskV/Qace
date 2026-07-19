@@ -1,17 +1,23 @@
 package ui.pages;
 
 import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
 import dto.Suite;
 import dto.TestCase;
+import io.qameta.allure.Step;
+import lombok.extern.log4j.Log4j2;
 
 import static com.codeborne.selenide.Condition.exactText;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 
+@Log4j2
 public class RepositoryPage extends BasePage {
+
+    private static final String[] SEVERITY_LABELS =
+            {"Undefined", "Blocker", "Critical", "Major", "Normal", "Minor", "Trivial"};
+    private static final String[] PRIORITY_LABELS = {"Not set", "Low", "Medium", "High"};
 
     private final SelenideElement REPOSITORY_NAV_LINK = $(byText("Repository"));
     private final SelenideElement MANUAL_TEST_BUTTON = $(byText("Manual test"));
@@ -37,22 +43,24 @@ public class RepositoryPage extends BasePage {
     private final SelenideElement CONFIRM_DELETE_INPUT = $("input[placeholder='Type CONFIRM to continue']");
     private final SelenideElement PAGE_BODY = $("body");
 
-    private static final String[] SEVERITY_LABELS =
-            {"Undefined", "Blocker", "Critical", "Major", "Normal", "Minor", "Trivial"};
-    private static final String[] PRIORITY_LABELS = {"Not set", "Low", "Medium", "High"};
-
+    @Step("Open Repository page")
     public RepositoryPage openRepository() {
+        log.info("Opening Repository page");
         REPOSITORY_NAV_LINK.click();
         return this;
     }
 
     @Override
+    @Step("Verify Repository page is opened")
     public RepositoryPage isPageOpened() {
+        log.info("Verifying Repository page is opened");
         MANUAL_TEST_BUTTON.shouldBe(Condition.visible);
         return this;
     }
 
+    @Step("Create suite {data}")
     public RepositoryPage createSuite(Suite data) {
+        log.info("Creating suite {}", data);
         CREATE_NEW_SUITE_LINK.click();
         SUITE_TITLE_FIELD.setValue(data.getTitle());
         SUITE_DESCRIPTION_FIELD.setValue(data.getDescription());
@@ -62,45 +70,59 @@ public class RepositoryPage extends BasePage {
     }
 
     private SelenideElement getSuiteActionsButton(String suiteName) {
-        return $("button[aria-label='suite " + suiteName + " actions']");
+        return $(String.format("button[aria-label='suite %s actions']", suiteName));
     }
 
+    @Step("Open action menu for suite '{suiteName}'")
     public RepositoryPage openSuiteActionMenu(String suiteName) {
+        log.info("Opening action menu for suite '{}'", suiteName);
         getSuiteActionsButton(suiteName).click();
         return this;
     }
 
+    @Step("Duplicate suite '{suiteName}'")
     public RepositoryPage duplicateSuite(String suiteName) {
+        log.info("Duplicating suite '{}'", suiteName);
         openSuiteActionMenu(suiteName);
         DUPLICATE_MENU_OPTION.click();
         CLONE_BUTTON.click();
         return this;
     }
 
+    @Step("Delete suite '{suiteName}'")
     public RepositoryPage deleteSuite(String suiteName) {
+        log.info("Deleting suite '{}'", suiteName);
         openSuiteActionMenu(suiteName);
         DELETE_MENU_OPTION.click();
         CONFIRM_DELETE_BUTTON.click();
         return this;
     }
 
+    @Step("Open suite '{suiteName}'")
     public RepositoryPage openSuite(String suiteName) {
+        log.info("Opening suite '{}'", suiteName);
         $(byText(suiteName)).click();
         return this;
     }
 
+    @Step("Open unsorted cases")
     public RepositoryPage openUnsortedCases() {
+        log.info("Opening unsorted cases");
         UNSORTED_CASES_FOLDER.click();
         return this;
     }
 
+    @Step("Create quick test case '{title}'")
     public RepositoryPage createQuickTestCase(String title) {
+        log.info("Creating quick test case '{}'", title);
         QUICK_TEST_BUTTON.click();
         QUICK_TEST_TITLE_FIELD.setValue(title).pressEnter();
         return this;
     }
 
+    @Step("Open manual test form")
     public RepositoryPage openManualTestForm() {
+        log.info("Opening manual test form");
         MANUAL_TEST_BUTTON.click();
         return this;
     }
@@ -114,14 +136,16 @@ public class RepositoryPage extends BasePage {
         $(byText(optionText)).click();
     }
 
+    @Step("Save test case {data}")
     public RepositoryPage saveTestCase(TestCase data) {
+        log.info("Saving test case {}", data);
         CASE_TITLE_FIELD.setValue(data.getTitle());
         getRichTextFieldByLabel("Description").setValue(data.getDescription());
         getRichTextFieldByLabel("Pre-conditions").setValue(data.getPreconditions());
         selectDropdownOption("Severity", SEVERITY_LABELS[data.getSeverity()]);
         selectDropdownOption("Priority", PRIORITY_LABELS[data.getPriority()]);
         if (Integer.valueOf(1).equals(data.getIsToBeAutomated())) {
-            clickViaJs(TO_BE_AUTOMATED_CHECKBOX);
+            TO_BE_AUTOMATED_CHECKBOX.click();
         }
         SAVE_BUTTON.click();
         CASE_TITLE_FIELD.shouldNotBe(Condition.visible);
@@ -129,37 +153,41 @@ public class RepositoryPage extends BasePage {
     }
 
     private SelenideElement getCaseCheckbox(String caseTitle) {
-        return $("[aria-label='select case " + caseTitle + "']");
+        return $(String.format("[aria-label='select case %s']", caseTitle));
     }
 
     private SelenideElement getTrashCaseCheckbox(String caseTitle) {
-        return $("[aria-label='Select " + caseTitle + "']");
+        return $(String.format("[aria-label='Select %s']", caseTitle));
     }
 
-    private void clickViaJs(SelenideElement element) {
-        Selenide.executeJavaScript("arguments[0].click()", element);
-    }
-
+    @Step("Select test case '{caseTitle}'")
     public RepositoryPage selectCase(String caseTitle) {
-        clickViaJs(getCaseCheckbox(caseTitle));
+        log.info("Selecting test case '{}'", caseTitle);
+        getCaseCheckbox(caseTitle).click();
         return this;
     }
 
+    @Step("Delete selected test cases")
     public RepositoryPage deleteSelectedCases() {
+        log.info("Deleting selected test cases");
         DELETE_SELECTED_BUTTON.click();
         CONFIRM_DELETE_INPUT.setValue("CONFIRM");
         CONFIRM_DELETE_BUTTON.click();
         return this;
     }
 
+    @Step("Open trash bin")
     public RepositoryPage openTrashBin() {
+        log.info("Opening trash bin");
         PROJECT_ACTIONS_MENU_BUTTON.click();
         TRASH_BIN_LINK.click();
         return this;
     }
 
+    @Step("Restore test case '{caseTitle}' from trash bin")
     public RepositoryPage restoreSelectedCase(String caseTitle) {
-        clickViaJs(getTrashCaseCheckbox(caseTitle));
+        log.info("Restoring test case '{}' from trash bin", caseTitle);
+        getTrashCaseCheckbox(caseTitle).click();
         RESTORE_SELECTED_BUTTON.click();
         return this;
     }

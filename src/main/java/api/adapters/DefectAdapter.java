@@ -1,7 +1,8 @@
-package adapters;
+package api.adapters;
 
 import api.models.defect.DefectRq;
 import api.models.defect.DefectRs;
+import dict.Urls;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
@@ -11,10 +12,11 @@ public class DefectAdapter extends BaseAdapter {
     public static DefectRs createDefect(DefectRq rq, String code) {
         return given()
                 .spec(spec)
+                .pathParam("code", code)
                 .body(rq)
                 .log().all()
                 .when()
-                .post("/defect/" + code)
+                .post(Urls.DEFECT_BY_CODE_ENDPOINT)
                 .then()
                 .log().all()
                 .body(matchesJsonSchemaInClasspath("schemas/create_defect.schema.json"))
@@ -29,7 +31,7 @@ public class DefectAdapter extends BaseAdapter {
                 .pathParam("code", code)
                 .pathParam("id", id)
                 .when()
-                .get("/defect/{code}/{id}")
+                .get(Urls.DEFECT_BY_ID_ENDPOINT)
                 .then()
                 .body(matchesJsonSchemaInClasspath("schemas/get_defect.schema.json"))
                 .spec(ok200)
@@ -44,7 +46,7 @@ public class DefectAdapter extends BaseAdapter {
                 .pathParam("id", id)
                 .body(rq)
                 .when()
-                .patch("/defect/{code}/{id}")
+                .patch(Urls.DEFECT_BY_ID_ENDPOINT)
                 .then()
                 .body(matchesJsonSchemaInClasspath("schemas/id_result.schema.json"))
                 .spec(ok200)
@@ -58,7 +60,7 @@ public class DefectAdapter extends BaseAdapter {
                 .pathParam("code", code)
                 .pathParam("id", id)
                 .when()
-                .delete("/defect/{code}/{id}")
+                .delete(Urls.DEFECT_BY_ID_ENDPOINT)
                 .then()
                 .body(matchesJsonSchemaInClasspath("schemas/id_result.schema.json"))
                 .spec(ok200)

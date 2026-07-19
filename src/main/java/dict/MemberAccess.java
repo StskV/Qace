@@ -1,5 +1,8 @@
 package dict;
 
+import lombok.Getter;
+
+@Getter
 public enum MemberAccess {
     ALL_MEMBERS("Add all members to this project"),
     GROUP_ACCESS("Group access"),
@@ -9,9 +12,5 @@ public enum MemberAccess {
 
     MemberAccess(String label) {
         this.label = label;
-    }
-
-    public String getLabel() {
-        return label;
     }
 }

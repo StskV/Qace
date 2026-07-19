@@ -2,7 +2,6 @@ package api.models.testCase;
 
 import api.models.common.BaseResult;
 import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -10,22 +9,16 @@ import lombok.EqualsAndHashCode;
 @Data
 public class Result extends BaseResult {
 
-    @SerializedName("description")
     @Expose
     public String description;
-    @SerializedName("preconditions")
     @Expose
     public String preconditions;
-    @SerializedName("postconditions")
     @Expose
     public String postconditions;
-    @SerializedName("severity")
     @Expose
     public int severity;
-    @SerializedName("priority")
     @Expose
     public int priority;
-    @SerializedName("automation")
     @Expose
     public int automation;
 }

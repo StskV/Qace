@@ -6,8 +6,10 @@ public class Elements {
     public static final String CREATE_NEW_PROJECT = "Create new project";
     public static final String CREATE_PROJECT = "Create project";
     public static final String INVALID_CREDENTIALS_MESSAGE = "These credentials do not match our records.";
+    public static final String REQUIRED_FIELD_MESSAGE = "This field is required";
     public static final String SETTINGS = "Settings";
     public static final String ARCHIVE_PROJECT = "Archive project";
     public static final String ARCHIVE_SUCCESS_MESSAGE = "Project was successfully archived!";
     public static final String PROJECT_LIMIT_MODAL_TITLE = "Time to upgrade!";
+    public static final String UPDATE_SETTINGS_BUTTON = "Update settings";
 }

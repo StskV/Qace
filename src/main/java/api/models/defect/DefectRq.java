@@ -1,6 +1,7 @@
 package api.models.defect;
 
 import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.Data;
 
@@ -11,8 +12,9 @@ public class DefectRq {
     private String code;
     @Expose
     private String title;
+    @SerializedName("actual_result")
     @Expose
-    private String actual_result;
+    private String actualResult;
     @Expose
     private Integer severity;
 }

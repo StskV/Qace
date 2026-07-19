@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Qace All Tests Suite" parallel="classes" thread-count="1">
+    <test name="Qace Tests">
+        <parameter name="browser" value="chrome"/>
+        <classes>
+            <class name="tests.base.LogTest"/>
+            <class name="tests.api.ProjectAPITest"/>
+            <class name="tests.api.TestSuiteAPITest"/>
+            <class name="tests.api.TestCaseAPITest"/>
+            <class name="tests.api.DefectAPITest"/>
+            <class name="tests.ui.LoginTest"/>
+            <class name="tests.ui.ProjectsPageTest"/>
+            <class name="tests.ui.ProjectPageTest"/>
+            <class name="tests.ui.ProjectSettingsPageTest"/>
+            <class name="tests.ui.DefectsPageTest"/>
+        </classes>
+    </test>
+</suite>

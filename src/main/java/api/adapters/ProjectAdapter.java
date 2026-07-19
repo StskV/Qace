@@ -1,7 +1,8 @@
-package adapters;
+package api.adapters;
 
 import api.models.project.ProjectRq;
 import api.models.project.ProjectRs;
+import dict.Urls;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
@@ -14,7 +15,7 @@ public class ProjectAdapter extends BaseAdapter {
                 .body(rq)
                 .log().all()
                 .when()
-                .post("/project")
+                .post(Urls.PROJECT_ENDPOINT)
                 .then()
                 .log().all()
                 .body(matchesJsonSchemaInClasspath("schemas/create_project.schema.json"))
@@ -28,7 +29,7 @@ public class ProjectAdapter extends BaseAdapter {
                 .spec(spec)
                 .pathParam("code", code)
                 .when()
-                .get("/project/{code}")
+                .get(Urls.PROJECT_BY_CODE_ENDPOINT)
                 .then()
                 .body(matchesJsonSchemaInClasspath("schemas/get_project.schema.json"))
                 .spec(ok200)
@@ -42,7 +43,7 @@ public class ProjectAdapter extends BaseAdapter {
                 .pathParams("code", code)
                 .log().all()
                 .when()
-                .delete("/project/{code}")
+                .delete(Urls.PROJECT_BY_CODE_ENDPOINT)
                 .then()
                 .log().all()
                 .body(matchesJsonSchemaInClasspath("schemas/status_only.schema.json"))
