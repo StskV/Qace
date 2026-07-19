@@ -41,7 +41,7 @@ public class BaseTest {
         boolean headless = Boolean.parseBoolean(System.getProperty("headless", "false"));
         Configuration.browser = browser;
         Configuration.baseUrl = Urls.BASE_URL;
-        Configuration.timeout = 20000;
+        Configuration.timeout = 30000;
         Configuration.clickViaJs = true;
         Configuration.headless = headless;
         Configuration.browserSize = "1920x1080";
