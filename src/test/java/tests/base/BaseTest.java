@@ -8,8 +8,8 @@ import io.qameta.allure.testng.AllureTestNg;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.firefox.FirefoxOptions;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
@@ -35,7 +35,7 @@ public class BaseTest {
     protected String email = System.getProperty("email", PropertyReader.getProperty("email"));
     protected String password = System.getProperty("password", PropertyReader.getProperty("password"));
 
-    @BeforeMethod
+    @BeforeClass
     @Parameters({"browser"})
     public void setUp(@Optional("chrome") String browser) {
         boolean headless = Boolean.parseBoolean(System.getProperty("headless", "false"));
@@ -89,7 +89,7 @@ public class BaseTest {
         defectsPage = new DefectsPage();
     }
 
-    @AfterMethod(alwaysRun = true)
+    @AfterClass(alwaysRun = true)
     public void tearDown() {
         getWebDriver().quit();
     }

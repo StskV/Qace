@@ -36,6 +36,13 @@ public class DefectsPage extends BasePage {
         return this;
     }
 
+    @Step("Open Defects page of project '{projectCode}'")
+    public DefectsPage openDefects(String projectCode) {
+        log.info("Opening Defects page of project '{}'", projectCode);
+        Selenide.open(String.format("%s%s", Urls.PROJECT_PATH, projectCode));
+        return openDefects().isPageOpened();
+    }
+
     @Override
     @Step("Verify Defects page is opened")
     public DefectsPage isPageOpened() {

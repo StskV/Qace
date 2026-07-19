@@ -14,13 +14,12 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-import tests.base.BaseTest;
-import ui.steps.LoginStep;
+import tests.base.AuthenticatedBaseTest;
 
 @Owner("Satsiuk Viktoriya")
 @Epic("Qase UI")
 @Feature("Defects Page")
-public class DefectsPageTest extends BaseTest {
+public class DefectsPageTest extends AuthenticatedBaseTest {
 
     private String projectCode;
 
@@ -39,7 +38,7 @@ public class DefectsPageTest extends BaseTest {
     @Severity(SeverityLevel.CRITICAL)
     public void checkCreateNewDefect() {
         String title = "New defect";
-        LoginStep.loginAndOpenDefects(loginPage, projectsPage, defectsPage, email, password, projectCode)
+        defectsPage.openDefects(projectCode)
                 .openNewDefectForm()
                 .saveDefect(DefectFactory.getDefect(title))
                 .getDefectByTitle(title).shouldBe(
@@ -54,7 +53,7 @@ public class DefectsPageTest extends BaseTest {
     @Story("Create defect with empty fields")
     @Severity(SeverityLevel.NORMAL)
     public void checkCreateDefectWithEmptyFields() {
-        LoginStep.loginAndOpenDefects(loginPage, projectsPage, defectsPage, email, password, projectCode)
+        defectsPage.openDefects(projectCode)
                 .openNewDefectForm()
                 .submitNewDefectForm()
                 .getDefectTitleField().shouldBe(
@@ -81,7 +80,7 @@ public class DefectsPageTest extends BaseTest {
     public void checkChangeDefectStatus(String status) {
         String title = "Defect To " + status;
         int defectId = DefectStep.createDefectViaApi(projectCode, title);
-        LoginStep.loginAndOpenDefects(loginPage, projectsPage, defectsPage, email, password, projectCode)
+        defectsPage.openDefects(projectCode)
                 .changeStatus(title, status)
                 .openDefect(projectCode, defectId)
                 .getStatusValue().shouldHave(
@@ -98,7 +97,7 @@ public class DefectsPageTest extends BaseTest {
     public void checkDeleteDefect() {
         String title = "Defect To Delete";
         DefectStep.createDefectViaApi(projectCode, title);
-        LoginStep.loginAndOpenDefects(loginPage, projectsPage, defectsPage, email, password, projectCode)
+        defectsPage.openDefects(projectCode)
                 .deleteDefect(title)
                 .getDefectByTitle(title).shouldNotBe(
                         Condition.visible.because("Deleted defect " + title + " should not be displayed in the defects list"));

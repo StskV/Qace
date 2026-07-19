@@ -1,7 +1,9 @@
 package ui.pages;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
+import dict.Urls;
 import dto.Suite;
 import dto.TestCase;
 import io.qameta.allure.Step;
@@ -48,6 +50,13 @@ public class RepositoryPage extends BasePage {
         log.info("Opening Repository page");
         REPOSITORY_NAV_LINK.click();
         return this;
+    }
+
+    @Step("Open Repository page of project '{projectCode}'")
+    public RepositoryPage openRepository(String projectCode) {
+        log.info("Opening Repository page of project '{}'", projectCode);
+        Selenide.open(String.format("%s%s", Urls.PROJECT_PATH, projectCode));
+        return openRepository().isPageOpened();
     }
 
     @Override

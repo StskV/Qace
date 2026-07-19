@@ -12,15 +12,14 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-import tests.base.BaseTest;
-import ui.steps.LoginStep;
+import tests.base.AuthenticatedBaseTest;
 
 import static dict.MemberAccess.DONT_ADD_MEMBERS;
 
 @Owner("Satsiuk Viktoriya")
 @Epic("Qase UI")
 @Feature("Projects")
-public class ProjectsPageTest extends BaseTest {
+public class ProjectsPageTest extends AuthenticatedBaseTest {
 
     private static final String PROJECT_NAME = "Projects Page Test";
 
@@ -44,7 +43,7 @@ public class ProjectsPageTest extends BaseTest {
     public void checkCreateProject() {
         String name = "New Project";
         extraCode = "QAC" + (System.currentTimeMillis() % 100000);
-        LoginStep.loginAndOpenProjects(loginPage, projectsPage, email, password)
+        projectsPage.openPage().isPageOpened()
                 .createProject(name, extraCode, DONT_ADD_MEMBERS)
                 .isPageOpened()
                 .getProjectTitle().shouldHave(
@@ -59,7 +58,7 @@ public class ProjectsPageTest extends BaseTest {
     @Story("Delete project")
     @Severity(SeverityLevel.CRITICAL)
     public void checkDeleteProject() {
-        LoginStep.loginAndOpenProjects(loginPage, projectsPage, email, password)
+        projectsPage.openPage().isPageOpened()
                 .deleteProject(PROJECT_NAME)
                 .getProjectByName(PROJECT_NAME).shouldNotBe(
                         Condition.visible.because("Project " + PROJECT_NAME + " should not be displayed after being deleted"));
@@ -83,7 +82,7 @@ public class ProjectsPageTest extends BaseTest {
     @Story("Create project with incomplete data")
     @Severity(SeverityLevel.NORMAL)
     public void checkCreateProjectWithEmptyFields(String name, String code) {
-        LoginStep.loginAndOpenProjects(loginPage, projectsPage, email, password)
+        projectsPage.openPage().isPageOpened()
                 .openCreateProjectModal()
                 .fillProjectForm(name, code)
                 .submitCreateProjectForm()
@@ -101,7 +100,7 @@ public class ProjectsPageTest extends BaseTest {
     public void checkProjectCreationLimit() {
         String name = "Limit Test";
         extraCode = "QAL" + (System.currentTimeMillis() % 100000);
-        LoginStep.loginAndOpenProjects(loginPage, projectsPage, email, password)
+        projectsPage.openPage().isPageOpened()
                 .createProject(name, extraCode, DONT_ADD_MEMBERS)
                 .isPageOpened();
         projectsPage.openPage().isPageOpened()
@@ -118,7 +117,7 @@ public class ProjectsPageTest extends BaseTest {
     @Story("Archive project")
     @Severity(SeverityLevel.NORMAL)
     public void checkArchiveProject() {
-        LoginStep.loginAndOpenProjects(loginPage, projectsPage, email, password)
+        projectsPage.openPage().isPageOpened()
                 .openProjectSettings(PROJECT_NAME)
                 .archiveProject();
         projectsPage.openPage().isPageOpened()
@@ -134,7 +133,7 @@ public class ProjectsPageTest extends BaseTest {
     @Story("Search project by name")
     @Severity(SeverityLevel.MINOR)
     public void checkSearchProjectByName() {
-        LoginStep.loginAndOpenProjects(loginPage, projectsPage, email, password)
+        projectsPage.openPage().isPageOpened()
                 .search(PROJECT_NAME)
                 .getProjectByName(PROJECT_NAME).shouldBe(
                         Condition.visible.because("Project " + PROJECT_NAME + " is not displayed in search results"));

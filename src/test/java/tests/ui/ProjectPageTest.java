@@ -15,13 +15,12 @@ import io.qameta.allure.Story;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import tests.base.BaseTest;
-import ui.steps.LoginStep;
+import tests.base.AuthenticatedBaseTest;
 
 @Owner("Satsiuk Viktoriya")
 @Epic("Qase UI")
 @Feature("Repository Page")
-public class ProjectPageTest extends BaseTest {
+public class ProjectPageTest extends AuthenticatedBaseTest {
 
     private String projectCode;
 
@@ -40,7 +39,7 @@ public class ProjectPageTest extends BaseTest {
     @Severity(SeverityLevel.CRITICAL)
     public void checkCreateNewSuite() {
         String suiteName = "New Suite";
-        LoginStep.loginAndOpenRepository(loginPage, projectsPage, repositoryPage, email, password, projectCode)
+        repositoryPage.openRepository(projectCode)
                 .createSuite(SuiteFactory.getSuite(suiteName))
                 .getSuiteByName(suiteName).shouldBe(
                         Condition.visible.because("Created suite " + suiteName + " is not displayed in the repository"));
@@ -56,7 +55,7 @@ public class ProjectPageTest extends BaseTest {
     public void checkDuplicateSuite() {
         String suiteName = "Suite To Duplicate";
         SuiteStep.createSuiteViaApi(projectCode, suiteName);
-        LoginStep.loginAndOpenRepository(loginPage, projectsPage, repositoryPage, email, password, projectCode)
+        repositoryPage.openRepository(projectCode)
                 .duplicateSuite(suiteName)
                 .getPageBody().shouldHave(Condition.text("2 suites").because("Suite count should be 2 after duplicating"));
     }
@@ -71,7 +70,7 @@ public class ProjectPageTest extends BaseTest {
     public void checkDeleteSuite() {
         String suiteName = "Suite To Delete";
         SuiteStep.createSuiteViaApi(projectCode, suiteName);
-        LoginStep.loginAndOpenRepository(loginPage, projectsPage, repositoryPage, email, password, projectCode)
+        repositoryPage.openRepository(projectCode)
                 .deleteSuite(suiteName)
                 .getSuiteByName(suiteName).shouldNotBe(Condition.visible.because("Suite " + suiteName + " was not deleted"));
     }
@@ -87,7 +86,7 @@ public class ProjectPageTest extends BaseTest {
         String suiteName = "Suite For Quick Case";
         String caseTitle = "Quick case";
         SuiteStep.createSuiteViaApi(projectCode, suiteName);
-        LoginStep.loginAndOpenRepository(loginPage, projectsPage, repositoryPage, email, password, projectCode)
+        repositoryPage.openRepository(projectCode)
                 .openSuite(suiteName)
                 .createQuickTestCase(caseTitle)
                 .getCaseByTitle(caseTitle).shouldBe(Condition.visible.because("Quick test case " + caseTitle + " is not displayed"));
@@ -102,7 +101,7 @@ public class ProjectPageTest extends BaseTest {
     @Severity(SeverityLevel.CRITICAL)
     public void checkCreateNewTestCase() {
         String caseTitle = "New test case";
-        LoginStep.loginAndOpenRepository(loginPage, projectsPage, repositoryPage, email, password, projectCode)
+        repositoryPage.openRepository(projectCode)
                 .openManualTestForm()
                 .saveTestCase(TestCaseFactory.getTestCase(caseTitle))
                 .openRepository()
@@ -122,7 +121,7 @@ public class ProjectPageTest extends BaseTest {
         String caseTitle = "Case to delete";
         int suiteId = SuiteStep.createSuiteViaApi(projectCode, suiteName);
         TestCaseStep.createTestCaseViaApi(projectCode, caseTitle, suiteId);
-        LoginStep.loginAndOpenRepository(loginPage, projectsPage, repositoryPage, email, password, projectCode)
+        repositoryPage.openRepository(projectCode)
                 .openSuite(suiteName)
                 .selectCase(caseTitle)
                 .deleteSelectedCases()
@@ -143,7 +142,7 @@ public class ProjectPageTest extends BaseTest {
         int suiteId = SuiteStep.createSuiteViaApi(projectCode, suiteName);
         int caseId = TestCaseStep.createTestCaseViaApi(projectCode, caseTitle, suiteId);
         TestCaseStep.deleteTestCaseViaApi(projectCode, caseId);
-        LoginStep.loginAndOpenRepository(loginPage, projectsPage, repositoryPage, email, password, projectCode)
+        repositoryPage.openRepository(projectCode)
                 .openTrashBin()
                 .restoreSelectedCase(caseTitle)
                 .getCaseByTitle(caseTitle).shouldNotBe(

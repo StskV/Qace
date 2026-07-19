@@ -41,14 +41,13 @@ public class LoginPage extends BasePage {
         return this;
     }
 
-    @Step("Log in")
     public ProjectsPage login(String email, String password) {
         log.info("Logging in");
         if (ACCEPT_COOKIE_BUTTON.is(Condition.visible, Duration.ofSeconds(5))) {
             ACCEPT_COOKIE_BUTTON.click();
         }
         EMAIL_LOCATOR.setValue(email);
-        PASSWORD_LOCATOR.setValue(password);
+        PASSWORD_LOCATOR.shouldBe(Condition.visible).getWrappedElement().sendKeys(password);
         SIGN_IN_LOCATOR.click();
         return new ProjectsPage();
     }

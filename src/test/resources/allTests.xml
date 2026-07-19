@@ -4,7 +4,6 @@
     <test name="Qace Tests">
         <parameter name="browser" value="chrome"/>
         <classes>
-            <class name="tests.base.LogTest"/>
             <class name="tests.api.ProjectAPITest"/>
             <class name="tests.api.TestSuiteAPITest"/>
             <class name="tests.api.TestCaseAPITest"/>

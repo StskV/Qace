@@ -11,14 +11,13 @@ import io.qameta.allure.Story;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import tests.base.BaseTest;
+import tests.base.AuthenticatedBaseTest;
 import ui.pages.ProjectSettingsPage;
-import ui.steps.LoginStep;
 
 @Owner("Satsiuk Viktoriya")
 @Epic("Qase UI")
 @Feature("Project Settings Page")
-public class ProjectSettingsPageTest extends BaseTest {
+public class ProjectSettingsPageTest extends AuthenticatedBaseTest {
 
     private static final String PROJECT_NAME = "Settings Test Project";
     private String projectCode;
@@ -38,7 +37,7 @@ public class ProjectSettingsPageTest extends BaseTest {
     @Severity(SeverityLevel.NORMAL)
     public void checkChangeProjectName() {
         String newName = "Renamed Project";
-        ProjectSettingsPage settingsPage = LoginStep.loginAndOpenProjects(loginPage, projectsPage, email, password)
+        ProjectSettingsPage settingsPage = projectsPage.openPage().isPageOpened()
                 .openProjectSettings(PROJECT_NAME)
                 .updateProjectName(newName)
                 .openSettings(projectCode);
@@ -55,7 +54,7 @@ public class ProjectSettingsPageTest extends BaseTest {
     @Severity(SeverityLevel.NORMAL)
     public void checkChangeProjectCode() {
         String newCode = "QANEW" + (System.currentTimeMillis() % 100000);
-        ProjectSettingsPage settingsPage = LoginStep.loginAndOpenProjects(loginPage, projectsPage, email, password)
+        ProjectSettingsPage settingsPage = projectsPage.openPage().isPageOpened()
                 .openProjectSettings(PROJECT_NAME)
                 .updateProjectCode(newCode)
                 .openSettings(newCode);
