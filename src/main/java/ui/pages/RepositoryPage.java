@@ -162,11 +162,11 @@ public class RepositoryPage extends BasePage {
     }
 
     private SelenideElement getCaseCheckbox(String caseTitle) {
-        return $(String.format("[aria-label='select case %s']", caseTitle));
+        return $(String.format("[aria-label='select case %s']", caseTitle)).ancestor("label");
     }
 
     private SelenideElement getTrashCaseCheckbox(String caseTitle) {
-        return $(String.format("[aria-label='Select %s']", caseTitle));
+        return $(String.format("[aria-label='Select %s']", caseTitle)).ancestor("label");
     }
 
     @Step("Select test case '{caseTitle}'")
